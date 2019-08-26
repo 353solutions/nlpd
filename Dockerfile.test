@@ -1,0 +1,12 @@
+FROM python:3.7-slim
+RUN apt-get update && apt-get install -y make
+RUN pip install --upgrade pip
+RUN pip install virtualenv
+WORKDIR /app
+COPY . .
+# In case host venv sneak in
+RUN rm -f venv
+RUN make dev-env
+# We set CI=yes via --build-arg
+ARG CI
+RUN make test
